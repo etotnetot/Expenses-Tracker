@@ -1,0 +1,4 @@
+root: C:\Users\dimad\Desktop\CourseWork\backend 
+path: C:\Program Files\nodejs 
+arch: 64 
+proxy: none
