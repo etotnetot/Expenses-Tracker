@@ -1,16 +1,20 @@
-const IncomeSchema= require("../models/IncomeModel")
-const sequelize = require('sequelize')
-const db = require('../db/db')
+//const IncomeSchema = require("../models/IncomeModel")
+const Income = require('../models/Income')
+
+//const sequelize = require('sequelize')
+//const Incomes = require('../models/Income')(sequelize)
+const {db, Incomes} = require('../db/db')
 
 exports.addIncome = async(req, res) => {
-    const {title, amount, category, description, date} = req.body
+    const {title, amount, type, category, description, date} = req.body
 
-    const income = IncomeSchema({
-        title,
-        amount,
-        category,
-        description,
-        date
+    const income = await Incomes.create({
+        title: title,
+        amount: amount,
+        type: type,
+        category: category,
+        description: description,
+        date: date,
     })
 
     try {
@@ -25,7 +29,7 @@ exports.addIncome = async(req, res) => {
         await income.save()
         res.status(200).json({message: "Income added!"})
     } catch (error) {
-        res.status(500).json({message: "Server Error!"})
+        res.status(500).json({message: "Server Error!" + error})
     }
 
     console.log(req.body);
@@ -33,9 +37,39 @@ exports.addIncome = async(req, res) => {
 
 exports.getIncomes = async (req, res) =>{
     try {
-        const incomes = await IncomeSchema.find().sort({createdAt: -1})
+        db()
+        const incomes = await Incomes.findAll()
         res.status(200).json(incomes)
     } catch (error) {
-        res.status(500).json({message: "Server Error!"})
+        res.status(500).json({message: "Server Error!" + error})
     }
+}
+
+exports.insertIncome = async (req, res) =>{
+    try {
+        const income = await Incomes.create({
+            title: 'Iwe',
+            amount: 45,
+            type: 'Income',
+            category: 'Salary',
+            description: 'My income',
+            date: '2020-10-18',
+        })
+
+        console.log("Income's auto-generated ID:", income.id);
+        res.status(200).json(Income)
+    } catch (error) {
+        res.status(500).json({message: "Server Error!" + error})
+    }
+}
+
+exports.deleteIncome = async (req, res) =>{
+    const {id} = req.params;
+    await Incomes.destroy({ where: { id: id }})
+        .then((income) => { 
+            res.status(200).json({message: "Income deleted!"})
+        })
+        .catch((error) => {
+            res.status(500).json({message: "Server Error!" + error})
+        })       
 }

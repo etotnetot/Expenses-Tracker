@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 
 module.exports = (sequelize) => {
-    const Income = sequelize.define("Income", {
+    const Expense = sequelize.define("Expense", {
         title: {
             type: Sequelize.DataTypes.STRING,
             allowNull: false,
@@ -16,23 +16,8 @@ module.exports = (sequelize) => {
                 notEmpty: true,
             }
         },
-        type: {
-            type: Sequelize.DataTypes.STRING,
-            default: "income",
-            allowNull: false,
-            validate: {
-                notEmpty: true,
-            }
-        },
         date: {
             type: Sequelize.DataTypes.DATE,
-            allowNull: false,
-            validate: {
-                notEmpty: true,
-            }
-        },
-        category: {
-            type: Sequelize.DataTypes.STRING,
             allowNull: false,
             validate: {
                 notEmpty: true,
@@ -47,5 +32,5 @@ module.exports = (sequelize) => {
         }
     })
 
-    return Income
+    return Expense
 }
